@@ -1,0 +1,24 @@
+# Local user state and dependencies never belong in the public kit.
+.env*
+auth.json
+config.yaml
+jarvis-data/
+runtime/
+logs/
+backups/
+models/
+sessions/
+memories/
+__pycache__/
+*.pyc
+.venv/
+*.gguf
+*.onnx
+*.onnx.json
+*.wav
+*.mp3
+*.db*
+*.key
+*.pem
+*.exe
+*.dll
