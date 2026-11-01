@@ -1,14 +1,97 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="jarvis-token" content="__TOKEN__"><title>Hermes · Jarvis</title><link rel="stylesheet" href="/style.css"><script src="/app.js" defer></script></head>
-<body>
-<aside><a class="brand" href="/">H<span>J</span></a><div class="side-title">HERMES / JARVIS</div><p class="muted">Your work.<br>Your machine.</p><nav><button data-view="workspace" class="selected">01 &nbsp; Workspace</button><button data-view="vault">02 &nbsp; Knowledge vault</button><button data-view="system">03 &nbsp; Local system</button></nav><div class="side-bottom"><span class="live-dot"></span> LOCAL BY DESIGN<p>No cloud inference.<br>No external page assets.</p></div></aside>
-<main><header><div><span class="eyebrow">PERSONAL OPERATING SPACE</span><h1>Good work starts here.</h1></div><div class="actions"><span id="health" class="badge">Checking local model…</span><button id="open-hermes" class="secondary">Open Hermes Desktop ↗</button></div></header>
-<div id="notice" role="status" aria-live="polite"></div>
-<section id="workspace" class="view"><div class="hero"><div><span class="eyebrow">HERMES, WITH A LITTLE MORE STRUCTURE</span><h2>A clear thought.<br>A useful next step.</h2><p>Talk, collect your knowledge, and turn an idea into a draft.<br>Model calls and speech processing stay on this PC.</p></div><div class="orb" aria-hidden="true"><div></div><span>JARVIS<br><small>LOCAL COMPANION</small></span></div></div>
-<div class="workspace-grid"><article class="card composer"><div class="card-top"><h3>What are we working on?</h3><span class="muted">01 / CREATE</span></div><label for="workflow">Workflow</label><select id="workflow"><option value="chat">Local chat</option><option value="lesson">Prepare a lesson</option><option value="carousel">Write a carousel</option><option value="video">Storyboard a children’s video</option><option value="worksheet">Draft a printable worksheet</option></select><label for="prompt">Your brief</label><textarea id="prompt" rows="8" maxlength="12000" placeholder="Describe the task, audience, and desired result. For an Islamic lesson, include verified source material or select a source note."></textarea><div class="context-line"><span id="context-count">0 notes selected</span><button id="choose-notes" class="text-button">Choose from vault →</button></div><div class="actions"><button id="run" class="primary">Create draft ↗</button><button id="record" class="secondary">Dictate</button><button id="clear" class="text-button">Clear</button></div><p class="fine">Dictation records only after you click. Stops after 60 seconds or when you click Stop. Review the transcript before submitting.</p></article>
-<article class="card output"><div class="card-top"><h3>Your result</h3><span id="job-status" class="muted">READY</span></div><p id="result-meta" class="fine">Drafts are saved to your vault. Review sources and accuracy before use.</p><pre id="result" dir="auto">A quiet place for your next useful idea.</pre><div class="actions"><button id="copy" class="secondary">Copy</button><button id="speak" class="secondary">Read aloud</button><button id="print" class="secondary">Print / PDF</button></div><p class="fine">Read aloud uses the installed English Piper voice; up to 3,000 characters. Arabic needs a suitable voice and pronunciation review.</p></article></div>
-<div class="strip"><div><span class="eyebrow">A BRIEF WITHOUT A MODEL CALL</span><h3>See what you have already collected.</h3></div><button id="brief" class="secondary">Build vault brief →</button></div></section>
-<section id="vault" class="view" hidden><div class="section-heading"><div><span class="eyebrow">02 / KNOWLEDGE</span><h2>Keep the useful things.</h2><p>Markdown files you own. Open the vault folder in Obsidian if you wish.</p></div><button id="refresh" class="secondary">Refresh</button></div><div class="workspace-grid"><article class="card"><h3>Capture a note</h3><label for="note-title">Title</label><input id="note-title" maxlength="120"><label for="note-area">Folder</label><select id="note-area"><option value="raw">Raw · captured material</option><option value="wiki">Wiki · organized knowledge</option></select><label for="note-content">Content / source references</label><textarea id="note-content" rows="10" maxlength="100000"></textarea><button id="save-note" class="primary">Save locally ↗</button><p class="fine">Nothing is sent to the model until you select a note and submit a workflow. Capture and wiki placement do not certify a source.</p></article><article class="card"><label for="search">Search saved notes</label><input id="search" placeholder="Search all words…"><p class="fine">Select up to five notes to supply as context for your next draft.</p><div id="notes"></div><button id="use-notes" class="secondary">Use selected notes →</button></article></div></section>
-<section id="system" class="view" hidden><span class="eyebrow">03 / THE MACHINE ROOM</span><h2>Know where your work goes.</h2><div class="system-grid"><article class="card"><h3>Local processing</h3><dl><dt>Model</dt><dd id="model-name">Checking…</dd><dt>Endpoint</dt><dd id="endpoint">Checking…</dd><dt>Speech recognition</dt><dd id="stt-state">Checking…</dd><dt>Speech output</dt><dd id="tts-state">Checking…</dd><dt>Knowledge vault</dt><dd id="vault-path">Checking…</dd></dl></article><article class="card"><h3>Hermes + this companion</h3><p>This panel uses the same local model server and installed speech models as Hermes. Its model workflows have no shell, browser, email, or other agent tools.</p><p>Use <strong>Hermes Local</strong> for full agent conversations, tools, and its native voice mode. The installed <strong>/jarvis-workspace</strong> skill teaches Hermes to use this vault.</p><p>Notes and outputs persist here. Full Hermes chats keep their own session history. Panel chat is a fresh request each time; select notes to carry context forward.</p><p>Installing models, searching the web, and publishing code require internet access. Full Hermes tools can also access the network. Local inference alone is not a system-wide network sandbox.</p></article></div></section>
-<footer>HERMES / JARVIS <span>Built around repeatable work, not a promise of magic.</span><button id="shutdown" class="text-button">Stop panel</button></footer></main><audio id="audio" controls hidden></audio>
-</body></html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="jarvis-token" content="__TOKEN__">
+  <title>J.A.R.V.I.S. / Hermes Local</title>
+  <link rel="stylesheet" href="/style.css"><script src="/app.js" defer></script>
+</head>
+<body data-core="idle">
+  <div class="hud-grid" aria-hidden="true"></div>
+  <div class="viewport-bracket top-left" aria-hidden="true"></div><div class="viewport-bracket bottom-right" aria-hidden="true"></div>
+  <main>
+    <header class="masthead">
+      <a class="identity" href="/" aria-label="Jarvis home">
+        <svg class="identity-mark" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 2 43 13v22L24 46 5 35V13Z"/><path d="m24 10 12 7v14l-12 7-12-7V17Z"/><path d="m16 20 8 14 8-14Z"/></svg>
+        <span><strong>J.A.R.V.I.S.</strong><small>HERMES PERSONAL ASSISTANT</small></span>
+      </a>
+      <nav aria-label="Main navigation"><button data-view="workspace" class="selected"><span>01</span> COMMAND</button><button data-view="vault"><span>02</span> KNOWLEDGE</button><button data-view="system"><span>03</span> SYSTEMS</button></nav>
+      <div class="header-status"><span id="health" class="badge">CONNECTING</span><time id="local-clock">--:--:--</time></div>
+    </header>
+    <div id="notice" role="status" aria-live="polite"></div>
+    <section id="workspace" class="view">
+      <div class="workspace-title"><span class="eyebrow">LOCAL INTELLIGENCE / COMMAND INTERFACE</span><span class="muted">HERMES CONNECTION <b class="link-indicator">●</b></span></div>
+      <div class="command-grid">
+        <aside class="left-stack">
+          <article class="panel status-panel">
+            <div class="panel-heading"><h2>PROCESSING SYSTEMS</h2><span class="panel-code">SYS / 01</span></div>
+            <div class="connection-diagram" aria-hidden="true"><svg viewBox="0 0 240 75"><path d="M10 38H75l20-24h50l20 24h65M75 38l20 24h50l20-24"/><circle cx="10" cy="38" r="4"/><circle cx="230" cy="38" r="4"/><path d="m108 28 12-7 12 7v16l-12 7-12-7Z"/><path d="M115 35h10m-5-5v10"/></svg></div>
+            <dl class="compact-data"><div><dt>MODEL LINK</dt><dd id="hud-model-state">CHECKING</dd></div><div><dt>INFERENCE</dt><dd id="hud-model-name">LOCAL</dd></div><div><dt>VOICE INPUT</dt><dd id="hud-stt">CHECKING</dd></div><div><dt>VOICE OUTPUT</dt><dd id="hud-tts">CHECKING</dd></div></dl>
+            <div class="local-lock"><span>◇</span><div>LOCAL PROCESSING<small>No cloud inference fallback</small></div></div>
+          </article>
+          <article class="panel route-panel">
+            <div class="panel-heading"><h2>TASK ROUTING</h2><span class="panel-code">RT / 02</span></div>
+            <div class="route-list" role="group" aria-label="Choose task workflow">
+              <button data-workflow="chat" class="active"><span>01</span><div>Conversation<small>Direct local response</small></div><b>↗</b></button>
+              <button data-workflow="lesson"><span>02</span><div>Lesson builder<small>Sources → teaching draft</small></div><b>↗</b></button>
+              <button data-workflow="carousel"><span>03</span><div>Carousel script<small>Eight-slide narrative</small></div><b>↗</b></button>
+              <button data-workflow="video"><span>04</span><div>Video storyboard<small>Scenes, timing & narration</small></div><b>↗</b></button>
+              <button data-workflow="worksheet"><span>05</span><div>Printable worksheet<small>Activities & parent guide</small></div><b>↗</b></button>
+            </div>
+          </article>
+          <article class="panel memory-panel"><div class="panel-heading"><h2>KNOWLEDGE VAULT</h2><span class="panel-code">MEM</span></div><div class="memory-summary"><strong id="vault-count">—</strong><span>RECENT NOTES<br><small>Stored on this machine</small></span></div><button id="brief" class="secondary wide">BUILD VAULT BRIEF <span>→</span></button></article>
+        </aside>
+        <div class="core-column">
+          <div class="core-stage">
+            <div class="core-coordinate coordinate-left" aria-hidden="true">H / LOCAL<br>PROCESSING NODE</div><div class="core-coordinate coordinate-right" aria-hidden="true">VOICE / TEXT<br>INTERFACE ACTIVE</div>
+            <div class="reactor" id="reactor">
+              <svg class="reactor-svg" viewBox="0 0 600 600" aria-hidden="true">
+                <defs><radialGradient id="core-light"><stop offset="0" stop-color="#8cefff" stop-opacity=".18"/><stop offset=".55" stop-color="#18c9ff" stop-opacity=".06"/><stop offset="1" stop-color="#18c9ff" stop-opacity="0"/></radialGradient><filter id="halo" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="2.5"/></filter></defs>
+                <circle cx="300" cy="300" r="280" fill="url(#core-light)" stroke="none"/>
+                <g class="outer-orbit"><circle cx="300" cy="300" r="270" class="faint"/><circle cx="300" cy="300" r="263" stroke-dasharray="1 8" class="ticks"/><circle cx="300" cy="300" r="249" stroke-dasharray="102 22 5 14 39 50" class="outer-segments"/></g>
+                <g class="ring-clockwise"><circle cx="300" cy="300" r="231" class="faint"/><circle cx="300" cy="300" r="222" stroke-dasharray="228 82 14 25" class="heavy-segments"/><circle cx="300" cy="300" r="212" stroke-dasharray="2 13" class="ring-dots"/></g>
+                <g class="ring-counter"><circle cx="300" cy="300" r="198" stroke-dasharray="90 24 6 15 40 50" class="inner-segments"/><circle cx="300" cy="300" r="190" class="faint"/><path class="amber" d="M155 179A189 189 0 0 1 224 127M447 419a189 189 0 0 1-61 45"/></g>
+                <g class="sphere-grid"><circle cx="300" cy="300" r="170"/><ellipse cx="300" cy="300" rx="170" ry="62"/><ellipse cx="300" cy="300" rx="170" ry="119"/><ellipse cx="300" cy="300" rx="62" ry="170"/><ellipse cx="300" cy="300" rx="119" ry="170"/><path d="M130 300h340M300 130v340"/></g>
+                <circle cx="300" cy="300" r="157" class="center-ring"/><circle cx="300" cy="300" r="151" class="faint"/>
+                <g class="crosshair"><path d="M300 8v36m0 512v36M8 300h36m512 0h36M76 76l22 22m404 404 22 22M76 524l22-22M502 98l22-22"/><path d="M280 48h40M280 552h40M48 280v40M552 280v40"/></g>
+                <circle cx="300" cy="300" r="222" class="glow-ring" filter="url(#halo)"/>
+              </svg>
+              <div class="core-center"><span class="core-kicker">PERSONAL ASSISTANT</span><h1>J.A.R.V.I.S.</h1><span id="core-state" class="core-state" aria-live="polite">STANDING BY</span><button id="core-voice" class="voice-trigger" aria-label="Start voice dictation"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3m-4 0h8"/></svg><span id="core-voice-label">INITIATE VOICE</span></button></div>
+            </div>
+            <div class="waveform" id="waveform" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><p id="core-caption">Ready for your instructions.</p>
+          </div>
+          <article class="panel composer">
+            <div class="panel-heading"><h2>COMMAND INPUT</h2><span class="panel-code">INPUT / 01</span></div>
+            <label for="workflow" class="sr-only">Workflow</label><select id="workflow"><option value="chat">CONVERSATION / LOCAL CHAT</option><option value="lesson">LESSON BUILDER</option><option value="carousel">CAROUSEL SCRIPT</option><option value="video">CHILDREN’S VIDEO STORYBOARD</option><option value="worksheet">PRINTABLE WORKSHEET</option></select>
+            <label for="prompt" class="sr-only">Your brief</label><textarea id="prompt" rows="3" maxlength="12000" placeholder="What would you like me to do?"></textarea>
+            <div class="context-line"><span id="context-count">0 notes selected</span><button id="choose-notes" class="text-button">+ ATTACH KNOWLEDGE</button></div>
+            <div class="actions"><button id="run" class="primary">EXECUTE <span>↗</span></button><button id="record" class="secondary">Dictate</button><button id="clear" class="text-button">CLEAR</button><span class="key-hint">CTRL + ENTER</span></div><p class="fine">Voice starts on click. Review the transcript before submitting. Add verified sources for Islamic lessons.</p>
+          </article>
+        </div>
+        <div class="right-stack">
+          <article class="panel output">
+            <div class="panel-heading"><h2>RESPONSE TERMINAL</h2><span id="job-status" class="panel-code">READY</span></div>
+            <div class="terminal-heading"><span class="terminal-dot"></span> JARVIS / LOCAL SESSION <span class="terminal-line"></span></div><p id="result-meta" class="fine">A fresh request each time. Attach notes to carry context forward.</p>
+            <pre id="result" dir="auto">Awaiting your command.
+
+I can help you think, draft, and work with your local knowledge.
+
+Choose a task or initiate voice to begin.</pre>
+            <div class="terminal-actions"><button id="copy" class="secondary">COPY</button><button id="speak" class="secondary">READ ALOUD</button><button id="print" class="secondary">PRINT / PDF</button></div><p class="fine">Outputs are saved as drafts. Review accuracy and religious sources before use.</p>
+          </article>
+          <article class="panel handoff-panel"><div class="panel-heading"><h2>AGENT UPLINK</h2><span class="panel-code">HERMES</span></div><p>Open the full Hermes agent for tools, files, and longer conversations.</p><button id="open-hermes" class="secondary wide">OPEN HERMES DESKTOP <span>↗</span></button></article>
+        </div>
+      </div>
+    </section>
+    <section id="vault" class="view" hidden>
+      <div class="section-heading"><div><span class="eyebrow">02 / LOCAL KNOWLEDGE</span><h1>KNOWLEDGE VAULT</h1><p>Capture, search, and select the context for your next command.</p></div><button id="refresh" class="secondary">REFRESH INDEX</button></div>
+      <div class="workspace-grid"><article class="panel"><div class="panel-heading"><h2>CAPTURE A NOTE</h2><span class="panel-code">WRITE</span></div><label for="note-title">Title</label><input id="note-title" maxlength="120"><label for="note-area">Folder</label><select id="note-area"><option value="raw">RAW / CAPTURED MATERIAL</option><option value="wiki">WIKI / ORGANIZED KNOWLEDGE</option></select><label for="note-content">Content / source references</label><textarea id="note-content" rows="10" maxlength="100000"></textarea><button id="save-note" class="primary">SAVE TO VAULT ↗</button><p class="fine">Only explicitly selected notes go to the local model. Folder placement does not certify a source.</p></article><article class="panel"><div class="panel-heading"><h2>LOCAL INDEX</h2><span class="panel-code">READ</span></div><label for="search">Search saved notes</label><input id="search" placeholder="Search all words…"><p class="fine">Select up to five notes as context.</p><div id="notes"></div><button id="use-notes" class="secondary">USE SELECTED NOTES →</button></article></div>
+    </section>
+    <section id="system" class="view" hidden>
+      <div class="section-heading"><div><span class="eyebrow">03 / CONNECTION DIAGNOSTICS</span><h1>LOCAL SYSTEMS</h1><p>Actual endpoint and installed speech capabilities.</p></div></div>
+      <div class="system-grid"><article class="panel"><div class="panel-heading"><h2>PROCESSING CONFIGURATION</h2><span class="panel-code">LOCAL</span></div><dl><dt>MODEL</dt><dd id="model-name">Checking…</dd><dt>ENDPOINT</dt><dd id="endpoint">Checking…</dd><dt>SPEECH RECOGNITION</dt><dd id="stt-state">Checking…</dd><dt>SPEECH OUTPUT</dt><dd id="tts-state">Checking…</dd><dt>KNOWLEDGE VAULT</dt><dd id="vault-path">Checking…</dd></dl></article><article class="panel"><div class="panel-heading"><h2>OPERATING BOUNDARIES</h2><span class="panel-code">INFO</span></div><p>This panel uses the same local model server and installed speech models as Hermes. Panel model workflows have no agent tools.</p><p>The <strong>/jarvis-workspace</strong> skill connects native Hermes to this vault. Hermes keeps its own conversation history.</p><p>Speech uses cached Whisper and an English Piper voice. Arabic pronunciation and religious evidence need suitable models and review.</p><p>Web tools, downloads and GitHub publishing can use the internet. Local inference is not an operating-system network sandbox.</p></article></div>
+    </section>
+    <footer><span><i class="status-dot"></i> LOCAL-FIRST PROTOCOL</span><span>HERMES × JARVIS <b>/</b> YOUR MACHINE. YOUR KNOWLEDGE.</span><div><button id="motion-toggle" class="text-button" aria-pressed="false">REDUCE MOTION</button><button id="shutdown" class="text-button">STOP PANEL</button></div></footer>
+  </main><audio id="audio" controls hidden></audio>
+</body>
+</html>
