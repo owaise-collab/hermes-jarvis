@@ -1,10 +1,10 @@
 # Verification and limitations
 
-Reference date: November 1, 2026. This is a Windows reference installation, not certification of every machine, voice, GPU or model.
+Foundation verification date: November 1, 2026. HUD redesign date: November 2, 2026. This is a Windows reference installation, not certification of every machine, voice, GPU or model.
 
 ## Automated behavior suite
 
-The 16 temporary-home/loopback tests pass on the Windows reference machine. They cover:
+The November 1 reference run passed 16 temporary-home/loopback tests on Windows. They cover:
 
 - note capture, Unicode text, all-word search and selected-note context;
 - path traversal rejection and local model endpoint validation;
@@ -19,7 +19,7 @@ The 16 temporary-home/loopback tests pass on the Windows reference machine. They
 
 The first test pass found a Windows launcher line-ending rollback mismatch. The implementation was corrected and the full suite rerun successfully. Tests use no cloud model, real microphone or user notes.
 
-## Live checks
+## Foundation live checks — November 1
 
 The installed panel opened at `127.0.0.1:9120` and reported the actual local model ready. The UI was visually inspected in the browser. Full synthetic model and speech test results are recorded separately after execution in `runtime/jarvis-verification.json` under the Hermes home; that file is deliberately excluded from the repository.
 
@@ -41,6 +41,14 @@ Run the repeatable live check explicitly:
 ```
 
 This sends a synthetic marker request to the panel, checks the saved output, synthesizes a short English sentence with local Piper and transcribes synthetic audio using cached Whisper. It does not record the microphone or play speakers. It adds a clearly synthetic marker output to the real vault.
+
+## HUD redesign checks — November 2
+
+The redesigned desktop HUD was visually inspected in the running browser. An actual local request returned `JARVIS_HUD_OK`, saved its output, and moved the core from processing to standby. Workflow buttons selected the matching route, a saved source note attached correctly, and the system view displayed the real endpoint and installed speech dependencies. The desktop page had no horizontal overflow. Motion controls were checked through computed styles: enabled rings use `hud-spin`; reduced motion uses no animation.
+
+JavaScript syntax and the repository publication checks passed. Mobile breakpoints and the white result-only print stylesheet remain implemented, but this pass does not certify a phone screenshot or a newly exported PDF: the requested mobile viewport override did not take effect in the browser. Microphone capture and speech playback were not repeated for a visual redesign; the original hardware limitation below still applies.
+
+The cyan rings and schematic lines are interface artwork. Model status comes from the local endpoint, note counts from the vault, and listening/speaking states from actual app events. Speech dependency availability must not be presented as a successful microphone test. The existing local-processing and native-tool network boundaries still apply.
 
 ## Hardware limitations observed
 

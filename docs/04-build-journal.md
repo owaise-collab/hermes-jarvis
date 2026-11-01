@@ -29,9 +29,13 @@ The installer discovers the existing PM runtime, preserves unrelated YAML settin
 - **Runtime packaging:** system Python did not have the speech/YAML packages. Used the selected Hermes PM environment rather than installing dependencies into an unrelated interpreter.
 - **Missing microphone:** device discovery showed no input endpoint. Live dictation cannot be certified until a microphone is connected. Synthetic local speech/transcription is tested separately.
 
-## Design rationale
+## HUD redesign — November 2, 2026
 
-Deep teal, ivory and restrained terracotta distinguish the workspace from the references. A simple geometric emblem is decorative; actual readiness comes from the model health check. The interface exposes useful outcomes instead of artificial token charts or meaningless animated metrics. The footer and system view explain the panel's role and limits.
+The initial ivory-and-teal productivity dashboard missed the user's visual meaning of JARVIS. After that correction, we reviewed [John Likens's Iron Man 3 production artwork](https://www.johnlikens.com/project/ironman-3/) and the [oral history of the original Iron Man HUD](https://vfxblog.com/ironman/) to ground a new design in the film interface language.
+
+The redesign uses a near-black/navy canvas, a dominant cyan segmented SVG core, thin angular panels, monospace labels and restrained amber accents. Command input, task routing and the response terminal surround the core. The artwork is original SVG/CSS; no film stills, remote assets, fonts or CDNs are loaded by the panel.
+
+Core states follow real app events: standing by, processing, listening, transcribing, speaking and offline. Voice activity is not implied while the microphone is idle. Installed speech dependencies do not mean a microphone is present. The side panels show actual model readiness and note counts, not fabricated GPU or system telemetry. Reduced-motion preferences, a manual motion toggle, responsive stacking and white result-only printing are part of the design; their browser verification is recorded separately in [verification](06-verification.md).
 
 ## Reproduce and extend
 
